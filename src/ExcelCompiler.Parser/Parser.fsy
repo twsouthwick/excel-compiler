@@ -5,8 +5,12 @@ open ExcelCompiler.Syntax
 // Regular tokens
 %token <int> INT
 %token <float> FLOAT
+%token <string> ID
 
 // Misc tokens
+%token COMMA
+%token LEFT_PAREN
+%token RIGHT_PAREN
 %token PLUS
 %token MULT
 %token EQUALS
@@ -28,22 +32,28 @@ open ExcelCompiler.Syntax
 start: Formula EOF { $1 }
 
 Formula:
-	| EQUALS Expression			{ Expression($2) }
+	| EQUALS Expression					{ Expression($2) }
 
 Expression:
-	| TermList					{ Terms(List($1)) }
+	| ID LEFT_PAREN ArgList RIGHT_PAREN { Function($1, List(List.rev $3)) }
+	| ID LEFT_PAREN RIGHT_PAREN			{ Function($1, Empty) }
+	| TermList							{ Terms(List($1)) }
+
+ArgList:
+	| Expression					{ [$1] }
+	| ArgList COMMA Expression		{ $3 :: $1 }
 
 FactorList:
-	| Factor					{ [$1] }
-	| FactorList MULT Factor	{ $3 :: $1 }
+	| Factor						{ [$1] }
+	| FactorList MULT Factor		{ $3 :: $1 }
 
 TermList:
-	| Term						{ [$1] }
-	| TermList PLUS Term		{ $3 :: $1 }
+	| Term							{ [$1] }
+	| TermList PLUS Term			{ $3 :: $1 }
 
 Term:
-	| FactorList				{ Factors(List($1)) }
+	| FactorList					{ Factors(List($1)) }
 
 Factor:
-	| INT						{ Int($1) }
-	| FLOAT						{ Float($1) }
+	| INT							{ Int($1) }
+	| FLOAT							{ Float($1) }

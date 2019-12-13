@@ -39,9 +39,13 @@ rule parsetokens = parse
 // ----------------------------
 | ['-']?digit+  { INT (Int32.Parse(lexeme lexbuf)) }
 | ['-']?digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
+| identifier  { ID(lexeme lexbuf) }
 // ----------------------------
 | "="             { EQUALS }
 | "+"             { PLUS }
 | "*"             { MULT }
+| "("             { LEFT_PAREN }
+| ")"             { RIGHT_PAREN }
+| ","             { COMMA }
 // ----------------------------
 | eof             { EOF }

@@ -5,6 +5,7 @@ open System.Linq
 
 [<CustomEquality; NoComparison>]
 type  SyntaxList<'T when 'T : equality>  =
+    | Empty
     | Single of 'T
     | List of seq<'T>
 
@@ -12,6 +13,7 @@ type  SyntaxList<'T when 'T : equality>  =
         match y with
         | :? SyntaxList<'T> as other ->
             match (this.unwrap this, this.unwrap other) with
+            | (Empty, Empty) -> true
             | (Single s1, Single s2) -> s1.Equals(s2)
             | (List l1, List l2) -> Enumerable.SequenceEqual(l1, l2)
             | _ -> false
@@ -19,6 +21,7 @@ type  SyntaxList<'T when 'T : equality>  =
 
     override this.GetHashCode() =
         match this with
+        | Empty -> 0
         | Single s -> s.GetHashCode()
         | List l ->
             let x = new HashCode()
@@ -27,8 +30,8 @@ type  SyntaxList<'T when 'T : equality>  =
 
      member private this.unwrap x =
             match x with
-            | Single s -> x
             | List l -> if l.Count() > 1 then x else Single(l.First())
+            | _ -> x
 
 type Factor =
     | Int of int
@@ -39,6 +42,7 @@ type Term =
 
 type Expression =
     | Terms of SyntaxList<Term>
+    | Function of string * SyntaxList<Expression>
 
 type Formula =
     | Expression of Expression
