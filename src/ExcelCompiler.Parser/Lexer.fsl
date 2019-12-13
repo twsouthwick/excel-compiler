@@ -41,5 +41,6 @@ rule parsetokens = parse
 | ['-']?digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
 // ----------------------------
 | "="             { EQUALS }
+| "+"             { PLUS }
 // ----------------------------
 | eof             { EOF }

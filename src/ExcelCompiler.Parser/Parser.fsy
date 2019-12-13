@@ -7,6 +7,7 @@ open ExcelCompiler.Syntax
 %token <float> FLOAT
 
 // Misc tokens
+%token PLUS
 %token EQUALS
 %token EOF
 
@@ -28,6 +29,16 @@ start: Formula EOF { $1 }
 Formula:
 	| EQUALS Expression { Expression($2) }
 
+op:
+	| PLUS				{ Add }
+
 Expression:
+	| Term				{ Term($1) }
+	| Term op Term		{ Terms($1, $2, $3) }
+
+Term:
+	| Factor			{ Factor($1) }
+
+Factor:
 	| INT				{ Int($1) }
 	| FLOAT				{ Float($1) }

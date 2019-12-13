@@ -1,7 +1,6 @@
 using Xunit;
 
-using static ExcelCompiler.Syntax.Formula;
-using static ExcelCompiler.Syntax.Expression;
+using static ExcelCompiler.Syntax;
 
 namespace ExcelCompiler.Tests
 {
@@ -10,7 +9,9 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void Float()
         {
-            var expected = NewExpression(NewFloat(1.2));
+            var expected = Formula.NewExpression(
+                Expression.NewTerm(
+                    Term.NewFactor(Factor.NewFloat(1.2))));
             var result = ParseUtils.Parse("=1.2");
 
             Assert.Equal(expected, result);
@@ -19,7 +20,9 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void Int()
         {
-            var expected = NewExpression(NewInt(1));
+            var expected = Formula.NewExpression(
+                Expression.NewTerm(
+                    Term.NewFactor(Factor.NewInt(1))));
             var result = ParseUtils.Parse("=1");
 
             Assert.Equal(expected, result);
@@ -28,8 +31,21 @@ namespace ExcelCompiler.Tests
         [Fact(Skip = "Failing")]
         public void Empty()
         {
-            var expected = NewExpression(null);
+            var expected = Formula.NewExpression(null);
             var result = ParseUtils.Parse("1");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Plus()
+        {
+            var expected = Formula.NewExpression(
+                Expression.NewTerms(
+                    Term.NewFactor(Factor.NewInt(1)),
+                    Op.Add,
+                    Term.NewFactor(Factor.NewInt(1))));
+            var result = ParseUtils.Parse("=1+1");
 
             Assert.Equal(expected, result);
         }
