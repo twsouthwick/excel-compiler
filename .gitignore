@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/src/ExcelCompiler.Parser/Lexer.fs
+/src/ExcelCompiler.Parser/Parser.fs
+/src/ExcelCompiler.Parser/Parser.fsi
