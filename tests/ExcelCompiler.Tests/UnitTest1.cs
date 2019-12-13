@@ -74,7 +74,6 @@ namespace ExcelCompiler.Tests
             Assert.Equal(expected, result);
         }
 
-
         [Fact]
         public void Mult()
         {
@@ -84,6 +83,19 @@ namespace ExcelCompiler.Tests
                     Operation.Multiply,
                     Expression.NewLiteralExpression(Literal.NewInt(2))));
             var result = Parse("=1*2");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void MultNegative()
+        {
+            var expected = Formula.NewExpression(
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(-1)),
+                    Operation.Multiply,
+                    Expression.NewLiteralExpression(Literal.NewInt(-2))));
+            var result = Parse("=-1*-2");
 
             Assert.Equal(expected, result);
         }
