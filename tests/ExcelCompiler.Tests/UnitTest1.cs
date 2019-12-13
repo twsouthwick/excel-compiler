@@ -2,8 +2,6 @@ using Xunit;
 
 using static ExcelCompiler.Syntax;
 
-using FactorList = Microsoft.FSharp.Collections.FSharpList<ExcelCompiler.Syntax.Factor>;
-
 namespace ExcelCompiler.Tests
 {
     public class UnitTest1
