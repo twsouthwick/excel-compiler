@@ -35,9 +35,9 @@ Formula:
 	| EQUALS Expression					{ Expression($2) }
 
 Expression:
-	| ID LEFT_PAREN ArgList RIGHT_PAREN { Function($1, List(List.rev $3)) }
+	| ID LEFT_PAREN ArgList RIGHT_PAREN { Function($1, CreateList(List.rev $3)) }
 	| ID LEFT_PAREN RIGHT_PAREN			{ Function($1, Empty) }
-	| TermList							{ Terms(List($1)) }
+	| TermList							{ Terms(CreateList($1)) }
 
 ArgList:
 	| Expression					{ [$1] }
@@ -52,7 +52,7 @@ TermList:
 	| TermList PLUS Term			{ $3 :: $1 }
 
 Term:
-	| FactorList					{ Factors(List($1)) }
+	| FactorList					{ Factors(CreateList($1)) }
 
 Factor:
 	| INT							{ Int($1) }
