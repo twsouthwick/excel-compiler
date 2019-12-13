@@ -1,13 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Syntax.fs" />
-    <Compile Include="Expressions.fs" />
     <FsYacc Include="Parser.fsy">
       <OtherFlags>--module Parser</OtherFlags>
     </FsYacc>

@@ -5,7 +5,7 @@ open System
 // Opens methods related to fslex.exe
 open FSharp.Text.Lexing
 
-open Expressions
+open Parser
 
 let inc_lnum bol pos =
   let lnum = pos.pos_lnum in
@@ -40,22 +40,7 @@ rule parsetokens = parse
 // ----------------------------
 | ['-']?digit+  { INT (Int32.Parse(lexeme lexbuf)) }
 | ['-']?digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
-| identifier      { STRING(lexeme lexbuf) }
-// ----------------------------
-| "pi"            { PI }
-| "e"             { E }
-// ----------------------------
-| "sin"           { SIN }
-| "cos"           { COS }
-| "tan"           { TAN }
 // ----------------------------
 | "="             { EQUALS }
-| "+"             { PLUS }
-| "-"             { DASH }
-| "*"             { ASTERISK }
-| "/"             { SLASH }
-| "^"             { CARET }
-| "("             { LPAREN }
-| ")"             { RPAREN }
 // ----------------------------
 | eof             { EOF }
