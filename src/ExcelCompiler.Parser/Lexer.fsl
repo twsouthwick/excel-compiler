@@ -37,8 +37,8 @@ rule parsetokens = parse
 | whitespace      { parsetokens lexbuf }
 | newline         { newline lexbuf; parsetokens lexbuf }
 // ----------------------------
-| ['-']?digit+  { INT (Int32.Parse(lexeme lexbuf)) }
-| ['-']?digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
+| digit+  { INT (Int32.Parse(lexeme lexbuf)) }
+| digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
 | identifier  { ID(lexeme lexbuf) }
 // ----------------------------
 | "="             { EQUALS }

@@ -18,11 +18,8 @@ namespace ExcelCompiler.Tests
         public void Float()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(
-                    SyntaxList<Term>.NewSingle(
-                        Term.NewFactors(
-                            SyntaxList<Factor>.NewSingle(
-                                Factor.NewFloat(1.2))))));
+                Expression.NewLiteralExpression(
+                    Literal.NewFloat(1.2)));
 
             var result = Parse("=1.2");
 
@@ -33,12 +30,8 @@ namespace ExcelCompiler.Tests
         public void Int()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(
-                    SyntaxList<Term>.NewSingle(
-                        Term.NewFactors(
-                            SyntaxList<Factor>.NewSingle(
-                                Factor.NewInt(1))))));
-
+                Expression.NewLiteralExpression(
+                    Literal.NewInt(1)));
             var result = Parse("=1");
 
             Assert.Equal(expected, result);
@@ -57,12 +50,11 @@ namespace ExcelCompiler.Tests
         public void Plus()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(SyntaxList<Term>.NewList(
-                    new[]
-                    {
-                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
-                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(2))),
-                    })));
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Operation.Add,
+                    Expression.NewLiteralExpression(Literal.NewInt(2))));
+
             var result = Parse("=1+2");
 
             Assert.Equal(expected, result);
@@ -72,12 +64,11 @@ namespace ExcelCompiler.Tests
         public void Minus()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(SyntaxList<Term>.NewList(
-                    new[]
-                    {
-                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
-                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(-2))),
-                    })));
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Operation.Subtract,
+                    Expression.NewLiteralExpression(Literal.NewInt(2))));
+
             var result = Parse("=1-2");
 
             Assert.Equal(expected, result);
@@ -88,12 +79,10 @@ namespace ExcelCompiler.Tests
         public void Mult()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(SyntaxList<Term>.NewSingle(
-                    Term.NewFactors(SyntaxList<Factor>.NewList(new[]
-                    {
-                        Factor.NewInt(1),
-                        Factor.NewInt(2),
-                    })))));
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Operation.Multiply,
+                    Expression.NewLiteralExpression(Literal.NewInt(2))));
             var result = Parse("=1*2");
 
             Assert.Equal(expected, result);
@@ -103,7 +92,7 @@ namespace ExcelCompiler.Tests
         public void SimpleFormulaNoArg()
         {
             var expected = Formula.NewExpression(
-                Expression.NewFunction("F", SyntaxList<Expression>.Empty));
+                Expression.NewFunctionExpression("F", SyntaxList<Expression>.Empty));
             var result = Parse("=F()");
 
             Assert.Equal(expected, result);
@@ -113,7 +102,7 @@ namespace ExcelCompiler.Tests
         public void SimpleFormula1Arg()
         {
             var expected = Formula.NewExpression(
-                Expression.NewFunction(
+                Expression.NewFunctionExpression(
                     "F", SyntaxList<Expression>.NewSingle(
                         CreateExpression(1))));
             var result = Parse("=F(1)");
@@ -125,7 +114,7 @@ namespace ExcelCompiler.Tests
         public void SimpleFormula2Args()
         {
             var expected = Formula.NewExpression(
-                Expression.NewFunction(
+                Expression.NewFunctionExpression(
                     "F", SyntaxList<Expression>.NewList(new[]
                     {
                         CreateExpression(1),
@@ -169,11 +158,6 @@ namespace ExcelCompiler.Tests
         }
 
         private Expression CreateExpression(int v)
-            => Expression.NewTerms(
-                SyntaxList<Term>.NewSingle(
-                    Term.NewFactors(
-                        SyntaxList<Factor>.NewSingle(
-                            Factor.NewInt(v)))));
-
+            => Expression.NewLiteralExpression(Literal.NewInt(v));
     }
 }

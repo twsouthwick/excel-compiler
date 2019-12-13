@@ -36,32 +36,26 @@ start: Formula EOF { $1 }
 Formula:
 	| EQUALS Expression					{ Expression($2) }
 
+Op:
+	| PLUS		{ Add }
+	| MINUS		{ Subtract }
+	| MULT		{ Multiply }
+	| DIVIDE	{ Divide }
+
 Expression:
-	| Function							{ $1}
-	| TermList							{ Terms(CreateList($1)) }
+	| Function							{ $1 }
+	| Literal							{ LiteralExpression($1) }
+	| Expression Op Expression			{ BinaryExpression($1, $2, $3) }
+	| LEFT_PAREN Expression RIGHT_PAREN { $2 }
 
 Function:
-	| ID LEFT_PAREN ArgList RIGHT_PAREN { Function($1, CreateList($3)) }
-	| ID LEFT_PAREN RIGHT_PAREN			{ Function($1, Empty) }
+	| ID LEFT_PAREN ArgList RIGHT_PAREN { FunctionExpression($1, CreateList($3)) }
+	| ID LEFT_PAREN RIGHT_PAREN			{ FunctionExpression($1, Empty) }
 
 ArgList:
 	| Expression					{ [$1] }
 	| ArgList COMMA Expression		{ $3 :: $1 }
 
-FactorList:
-	| Factor						{ [$1] }
-	| FactorList MULT Factor		{ $3 :: $1 }
-
-TermList:
-	| Term							{ [$1] }
-	| TermList PLUS Term			{ $3 :: $1 }
-	| TermList Term					{ $2 :: $1 }
-
-Term:
-	| FactorList					{ Factors(CreateList($1)) }
-
-Factor:
+Literal:
 	| INT							{ Int($1) }
 	| FLOAT							{ Float($1) }
-	| LEFT_PAREN Expression RIGHT_PAREN { Factor.Expression($2) }
-	| Function						{ Factor.Expression($1)}

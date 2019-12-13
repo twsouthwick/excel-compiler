@@ -28,15 +28,20 @@ type  SyntaxList<'T when 'T : equality>  =
             for i in l do x.Add(i)
             x.ToHashCode()
 
-type Factor =
+type Operation =
+    | Add
+    | Subtract
+    | Multiply
+    | Divide
+
+type ArgumentList = SyntaxList<Expression>
+and Literal =
     | Int of int
     | Float of float
-    | Expression of Expression
-and Term =
-    | Factors of SyntaxList<Factor>
 and Expression =
-    | Terms of SyntaxList<Term>
-    | Function of string * SyntaxList<Expression>
+    | BinaryExpression of Expression * Operation * Expression
+    | LiteralExpression of Literal
+    | FunctionExpression of string * ArgumentList
 and Formula =
     | Expression of Expression
     | EmptyExpression
