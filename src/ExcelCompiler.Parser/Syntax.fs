@@ -44,4 +44,4 @@ and Formula =
 let internal CreateList<'T when 'T : equality> (t : 'T list) =
     if t.IsEmpty then Empty
     elif t.Length = 1 then Single(List.head t)
-    else List(t)
+    else List(List.rev t)

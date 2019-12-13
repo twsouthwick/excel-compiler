@@ -12,7 +12,9 @@ open ExcelCompiler.Syntax
 %token LEFT_PAREN
 %token RIGHT_PAREN
 %token PLUS
+%token MINUS
 %token MULT
+%token DIVIDE
 %token EQUALS
 %token EOF
 
@@ -39,7 +41,7 @@ Expression:
 	| TermList							{ Terms(CreateList($1)) }
 
 Function:
-	| ID LEFT_PAREN ArgList RIGHT_PAREN { Function($1, CreateList(List.rev $3)) }
+	| ID LEFT_PAREN ArgList RIGHT_PAREN { Function($1, CreateList($3)) }
 	| ID LEFT_PAREN RIGHT_PAREN			{ Function($1, Empty) }
 
 ArgList:
@@ -53,6 +55,7 @@ FactorList:
 TermList:
 	| Term							{ [$1] }
 	| TermList PLUS Term			{ $3 :: $1 }
+	| TermList Term					{ $2 :: $1 }
 
 Term:
 	| FactorList					{ Factors(CreateList($1)) }

@@ -61,12 +61,28 @@ namespace ExcelCompiler.Tests
                     new[]
                     {
                         Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
-                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
+                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(2))),
                     })));
-            var result = Parse("=1+1");
+            var result = Parse("=1+2");
 
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public void Minus()
+        {
+            var expected = Formula.NewExpression(
+                Expression.NewTerms(SyntaxList<Term>.NewList(
+                    new[]
+                    {
+                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
+                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(-2))),
+                    })));
+            var result = Parse("=1-2");
+
+            Assert.Equal(expected, result);
+        }
+
 
         [Fact]
         public void Mult()
@@ -76,9 +92,9 @@ namespace ExcelCompiler.Tests
                     Term.NewFactors(SyntaxList<Factor>.NewList(new[]
                     {
                         Factor.NewInt(1),
-                        Factor.NewInt(1),
+                        Factor.NewInt(2),
                     })))));
-            var result = Parse("=1*1");
+            var result = Parse("=1*2");
 
             Assert.Equal(expected, result);
         }
@@ -126,10 +142,16 @@ namespace ExcelCompiler.Tests
             Parse("=1 + F2()");
         }
 
-          [Fact]
+        [Fact]
         public void NestedParenthesis()
         {
             Parse("=1 + (2+3)");
+        }
+
+        [Fact]
+        public void MinusNestedParenthesis()
+        {
+            Parse("=1 - (2+3)");
         }
 
         private Formula Parse(string input)

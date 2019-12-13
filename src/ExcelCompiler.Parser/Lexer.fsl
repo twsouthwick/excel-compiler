@@ -43,7 +43,9 @@ rule parsetokens = parse
 // ----------------------------
 | "="             { EQUALS }
 | "+"             { PLUS }
+| "-"             { MINUS }
 | "*"             { MULT }
+| "/"             { DIVIDE }
 | "("             { LEFT_PAREN }
 | ")"             { RIGHT_PAREN }
 | ","             { COMMA }
