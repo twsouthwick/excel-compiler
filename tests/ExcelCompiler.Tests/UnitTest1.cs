@@ -1,3 +1,4 @@
+using Microsoft.FSharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -150,19 +151,49 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void NestedFunctions()
         {
-            Parse("=1 + F2()");
+            var expected = Statement.NewFormula(
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Operation.Add,
+                    Expression.NewFunctionExpression("F2", SyntaxList<Expression>.Empty)));
+
+            var result = Parse("=1 + F2()");
+
+            Assert.Equal(expected, result);
         }
 
         [Fact]
         public void NestedParenthesis()
         {
-            Parse("=1 + (2+3)");
+            var expected = Statement.NewFormula(
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Operation.Add,
+                    Expression.NewBinaryExpression(
+                        Expression.NewLiteralExpression(Literal.NewInt(2)),
+                        Operation.Add,
+                        Expression.NewLiteralExpression(Literal.NewInt(3)))));
+
+            var result = Parse("=1 + (2+3)");
+
+            Assert.Equal(expected, result);
         }
 
         [Fact]
         public void MinusNestedParenthesis()
         {
-            Parse("=1 - (2+3)");
+            var expected = Statement.NewFormula(
+                Expression.NewBinaryExpression(
+                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Operation.Subtract,
+                    Expression.NewBinaryExpression(
+                        Expression.NewLiteralExpression(Literal.NewInt(2)),
+                        Operation.Add,
+                        Expression.NewLiteralExpression(Literal.NewInt(3)))));
+
+            var result = Parse("=1 - (2+3)");
+
+            Assert.Equal(expected, result);
         }
 
         private Statement Parse(string input)
