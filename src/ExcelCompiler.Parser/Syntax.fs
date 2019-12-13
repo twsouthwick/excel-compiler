@@ -3,19 +3,32 @@
 open System
 open System.Linq
 
-type SyntaxList<'T> private (x: seq<'T>) =
-    static member Create(x:seq<'T>) = new SyntaxList<'T>(x)
-    static member Create(x:'T) = new SyntaxList<'T>([x])
-    member this.Value = x
+[<CustomEquality; NoComparison>]
+type  SyntaxList<'T when 'T : equality>  =
+    | Single of 'T
+    | List of seq<'T>
+
     override this.Equals(y) =
         match y with
-        | :? SyntaxList<'T> as other -> Enumerable.SequenceEqual(this.Value, other.Value)
-        | :? seq<'T> as other -> Enumerable.SequenceEqual(this.Value, other)
+        | :? SyntaxList<'T> as other ->
+            match (this.unwrap this, this.unwrap other) with
+            | (Single s1, Single s2) -> s1.Equals(s2)
+            | (List l1, List l2) -> Enumerable.SequenceEqual(l1, l2)
+            | _ -> false
         | _ -> false
+
     override this.GetHashCode() =
-        let x = new HashCode()
-        for i in this.Value do x.Add(i)
-        x.ToHashCode()
+        match this with
+        | Single s -> s.GetHashCode()
+        | List l ->
+            let x = new HashCode()
+            for i in l do x.Add(i)
+            x.ToHashCode()
+
+     member private this.unwrap x =
+            match x with
+            | Single s -> x
+            | List l -> if l.Count() > 1 then x else Single(l.First())
 
 type Factor =
     | Int of int

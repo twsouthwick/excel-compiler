@@ -31,7 +31,7 @@ Formula:
 	| EQUALS Expression			{ Expression($2) }
 
 Expression:
-	| TermList					{ Terms(SyntaxList<Term>.Create($1)) }
+	| TermList					{ Terms(List($1)) }
 
 FactorList:
 	| Factor					{ [$1] }
@@ -42,7 +42,7 @@ TermList:
 	| TermList PLUS Term		{ $3 :: $1 }
 
 Term:
-	| FactorList				{ Factors(SyntaxList<Factor>.Create($1)) }
+	| FactorList				{ Factors(List($1)) }
 
 Factor:
 	| INT						{ Int($1) }

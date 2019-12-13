@@ -11,10 +11,11 @@ namespace ExcelCompiler.Tests
         {
             var expected = Formula.NewExpression(
                 Expression.NewTerms(
-                    SyntaxList<Term>.Create(
+                    SyntaxList<Term>.NewSingle(
                         Term.NewFactors(
-                            SyntaxList<Factor>.Create(
+                            SyntaxList<Factor>.NewSingle(
                                 Factor.NewFloat(1.2))))));
+
             var result = ParseUtils.Parse("=1.2");
 
             Assert.Equal(expected, result);
@@ -25,9 +26,9 @@ namespace ExcelCompiler.Tests
         {
             var expected = Formula.NewExpression(
                 Expression.NewTerms(
-                    SyntaxList<Term>.Create(
+                    SyntaxList<Term>.NewSingle(
                         Term.NewFactors(
-                            SyntaxList<Factor>.Create(
+                            SyntaxList<Factor>.NewSingle(
                                 Factor.NewInt(1))))));
 
             var result = ParseUtils.Parse("=1");
@@ -48,11 +49,11 @@ namespace ExcelCompiler.Tests
         public void Plus()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(SyntaxList<Term>.Create(
+                Expression.NewTerms(SyntaxList<Term>.NewList(
                     new[]
                     {
-                        Term.NewFactors(SyntaxList<Factor>.Create(Factor.NewInt(1))),
-                        Term.NewFactors(SyntaxList<Factor>.Create(Factor.NewInt(1))),
+                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
+                        Term.NewFactors(SyntaxList<Factor>.NewSingle(Factor.NewInt(1))),
                     })));
             var result = ParseUtils.Parse("=1+1");
 
@@ -63,8 +64,8 @@ namespace ExcelCompiler.Tests
         public void Mult()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(SyntaxList<Term>.Create(
-                    Term.NewFactors(SyntaxList<Factor>.Create(new[]
+                Expression.NewTerms(SyntaxList<Term>.NewSingle(
+                    Term.NewFactors(SyntaxList<Factor>.NewList(new[]
                     {
                         Factor.NewInt(1),
                         Factor.NewInt(1),
