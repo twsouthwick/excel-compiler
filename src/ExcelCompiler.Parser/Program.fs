@@ -11,9 +11,5 @@ let testLexerAndParserFromString text =
 
     printfn "Done"
 
-testLexerAndParserFromString "cos pi * 42.0"
-
-printfn "Press any key to continue..."
-System.Console.ReadLine() |> ignore
-
+testLexerAndParserFromString "=cos pi * 42.0"
 

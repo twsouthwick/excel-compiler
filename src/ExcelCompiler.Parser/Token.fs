@@ -1,6 +1,8 @@
 ﻿module Token
 
 type Tokens =
+    | EQUALS
+    | STRING of string
     // Numeric types
     | INT of int        | FLOAT of float
     // Constants
@@ -13,3 +15,8 @@ type Tokens =
     // Misc
     | LPAREN            | RPAREN        | EOF
 
+type Expression =
+    | Text of string
+
+type Formula =
+    | Expression of Expression

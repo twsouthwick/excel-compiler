@@ -27,9 +27,11 @@ let lexeme (lexbuf : LexBuffer<char>) = new System.String(lexbuf.Lexeme)
 }
 
 // Regular expressions
+let char = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let whitespace = [' ' '\t' ]
 let newline = ('\n' | '\r' '\n')
+let identifier  = char(char|digit|['-' '_' '.'])*
 
 rule parsetokens = parse
 // ----------------------------
@@ -38,6 +40,7 @@ rule parsetokens = parse
 // ----------------------------
 | ['-']?digit+  { INT (Int32.Parse(lexeme lexbuf)) }
 | ['-']?digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
+| identifier      { STRING(lexeme lexbuf) }
 // ----------------------------
 | "pi"            { PI }
 | "e"             { E }
@@ -46,6 +49,7 @@ rule parsetokens = parse
 | "cos"           { COS }
 | "tan"           { TAN }
 // ----------------------------
+| "="             { EQUALS }
 | "+"             { PLUS }
 | "-"             { DASH }
 | "*"             { ASTERISK }
