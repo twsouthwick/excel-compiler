@@ -2,6 +2,8 @@ using Xunit;
 
 using static ExcelCompiler.Syntax;
 
+using FactorList = Microsoft.FSharp.Collections.FSharpList<ExcelCompiler.Syntax.Factor>;
+
 namespace ExcelCompiler.Tests
 {
     public class UnitTest1
@@ -11,7 +13,8 @@ namespace ExcelCompiler.Tests
         {
             var expected = Formula.NewExpression(
                 Expression.NewTerm(
-                    Term.NewFactor(Factor.NewFloat(1.2))));
+                    SyntaxList<Factor>.Create(
+                        Factor.NewFloat(1.2))));
             var result = ParseUtils.Parse("=1.2");
 
             Assert.Equal(expected, result);
@@ -22,7 +25,8 @@ namespace ExcelCompiler.Tests
         {
             var expected = Formula.NewExpression(
                 Expression.NewTerm(
-                    Term.NewFactor(Factor.NewInt(1))));
+                    SyntaxList<Factor>.Create(
+                        Factor.NewInt(1))));
             var result = ParseUtils.Parse("=1");
 
             Assert.Equal(expected, result);
@@ -41,10 +45,12 @@ namespace ExcelCompiler.Tests
         public void Plus()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerms(
-                    Term.NewFactor(Factor.NewInt(1)),
-                    Op.Add,
-                    Term.NewFactor(Factor.NewInt(1))));
+                Expression.NewTerm(SyntaxList<Factor>.Create(
+                    new[]
+                    {
+                        Factor.NewInt(1),
+                        Factor.NewInt(1)
+                    })));
             var result = ParseUtils.Parse("=1+1");
 
             Assert.Equal(expected, result);

@@ -8,6 +8,7 @@ open ExcelCompiler.Syntax
 
 // Misc tokens
 %token PLUS
+%token MULT
 %token EQUALS
 %token EOF
 
@@ -29,15 +30,12 @@ start: Formula EOF { $1 }
 Formula:
 	| EQUALS Expression { Expression($2) }
 
-op:
-	| PLUS				{ Add }
-
 Expression:
-	| Term				{ Term($1) }
-	| Term op Term		{ Terms($1, $2, $3) }
+	| FactorList { Term(SyntaxList<Factor>.Create($1)) }
 
-Term:
-	| Factor			{ Factor($1) }
+FactorList:
+	| Factor					{ [$1] }
+	| FactorList PLUS Factor	{ $3 :: $1 }
 
 Factor:
 	| INT				{ Int($1) }
