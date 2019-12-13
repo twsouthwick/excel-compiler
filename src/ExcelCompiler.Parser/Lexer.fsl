@@ -1,23 +1,57 @@
 {
 
+open System
+
 // Opens methods related to fslex.exe
 open FSharp.Text.Lexing
 
-let newline (lexbuf: LexBuffer<_>) = 
-  lexbuf.StartPos <- lexbuf.StartPos.NextLine
+open Token
 
+let inc_lnum bol pos =
+  let lnum = pos.pos_lnum in
+  {pos with pos_lnum =  lnum+1; pos_bol = bol }
+
+type lexbuf = LexBuffer<char>
+type position = Position
+
+let lexeme_end_p (lb:lexbuf) = lb.EndPos
+let lexeme_end (lb:lexbuf) = (lexeme_end_p lb).pos_cnum
+
+let lexbuf_set_curr_p (lb:lexbuf) (p : position) = lb.EndPos  <- p
+
+let newline lexbuf =
+  lexbuf_set_curr_p lexbuf
+    ( inc_lnum (lexeme_end lexbuf) (lexeme_end_p lexbuf))
+
+let lexeme (lexbuf : LexBuffer<char>) = new System.String(lexbuf.Lexeme)
 }
 
 // Regular expressions
+let digit = ['0'-'9']
 let whitespace = [' ' '\t' ]
 let newline = ('\n' | '\r' '\n')
 
-rule tokenstream = parse
-// --------------------------
-| "hello" 		{ Parser.HELLO }
-// --------------------------
-| whitespace	{ tokenstream lexbuf }
-| newline	{ newline lexbuf; tokenstream lexbuf }
-// --------------------------
-| _    		{ failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) }
-| eof   	{ Parser.EOF }
+rule parsetokens = parse
+// ----------------------------
+| whitespace      { parsetokens lexbuf }
+| newline         { newline lexbuf; parsetokens lexbuf }
+// ----------------------------
+| ['-']?digit+  { INT (Int32.Parse(lexeme lexbuf)) }
+| ['-']?digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
+// ----------------------------
+| "pi"            { PI }
+| "e"             { E }
+// ----------------------------
+| "sin"           { SIN }
+| "cos"           { COS }
+| "tan"           { TAN }
+// ----------------------------
+| "+"             { PLUS }
+| "-"             { DASH }
+| "*"             { ASTERISK }
+| "/"             { SLASH }
+| "^"             { CARET }
+| "("             { LPAREN }
+| ")"             { RPAREN }
+// ----------------------------
+| eof             { EOF }

@@ -18,8 +18,8 @@
 
 %%
 
-// These are the rules of the grammar along with the F# code of the 
-// actions executed as rules are reduced.  
+// These are the rules of the grammar along with the F# code of the
+// actions executed as rules are reduced.
 start: File EOF { $1 }
 
 File:

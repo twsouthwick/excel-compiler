@@ -3,27 +3,15 @@
 open System.IO
 open FSharp.Text.Lexing
 
-let testLexerAndParserFromString text expectedCount = 
+let testLexerAndParserFromString text =
     let lexbuf = LexBuffer<char>.FromString text
 
-    let countFromParser = Parser.start Lexer.tokenstream lexbuf
+    while not lexbuf.IsPastEndOfStream do
+        printfn "%A" (Lexer.parsetokens lexbuf)
 
-    printfn "countFromParser: result = %d, expected %d" countFromParser expectedCount
+    printfn "Done"
 
-let testLexerAndParserFromFile (fileName:string) expectedCount = 
-    use textReader = new System.IO.StreamReader(fileName)
-    let lexbuf = LexBuffer<char>.FromTextReader textReader
-
-    let countFromParser = Parser.start Lexer.tokenstream lexbuf
-
-    printfn "countFromParser: result = %d, expected %d" countFromParser expectedCount
-
-testLexerAndParserFromString "hello" 1
-testLexerAndParserFromString "hello hello" 2
-
-let testFile = Path.Combine(__SOURCE_DIRECTORY__, "test.txt")
-File.WriteAllText(testFile, "hello hello")
-testLexerAndParserFromFile testFile 2
+testLexerAndParserFromString "cos pi * 42.0"
 
 printfn "Press any key to continue..."
 System.Console.ReadLine() |> ignore
