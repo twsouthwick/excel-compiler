@@ -12,9 +12,11 @@ namespace ExcelCompiler.Tests
         public void Float()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerm(
-                    SyntaxList<Factor>.Create(
-                        Factor.NewFloat(1.2))));
+                Expression.NewTerms(
+                    SyntaxList<Term>.Create(
+                        Term.NewFactors(
+                            SyntaxList<Factor>.Create(
+                                Factor.NewFloat(1.2))))));
             var result = ParseUtils.Parse("=1.2");
 
             Assert.Equal(expected, result);
@@ -24,9 +26,12 @@ namespace ExcelCompiler.Tests
         public void Int()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerm(
-                    SyntaxList<Factor>.Create(
-                        Factor.NewInt(1))));
+                Expression.NewTerms(
+                    SyntaxList<Term>.Create(
+                        Term.NewFactors(
+                            SyntaxList<Factor>.Create(
+                                Factor.NewInt(1))))));
+
             var result = ParseUtils.Parse("=1");
 
             Assert.Equal(expected, result);
@@ -45,15 +50,31 @@ namespace ExcelCompiler.Tests
         public void Plus()
         {
             var expected = Formula.NewExpression(
-                Expression.NewTerm(SyntaxList<Factor>.Create(
+                Expression.NewTerms(SyntaxList<Term>.Create(
                     new[]
                     {
-                        Factor.NewInt(1),
-                        Factor.NewInt(1)
+                        Term.NewFactors(SyntaxList<Factor>.Create(Factor.NewInt(1))),
+                        Term.NewFactors(SyntaxList<Factor>.Create(Factor.NewInt(1))),
                     })));
             var result = ParseUtils.Parse("=1+1");
 
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public void Mult()
+        {
+            var expected = Formula.NewExpression(
+                Expression.NewTerms(SyntaxList<Term>.Create(
+                    Term.NewFactors(SyntaxList<Factor>.Create(new[]
+                    {
+                        Factor.NewInt(1),
+                        Factor.NewInt(1),
+                    })))));
+            var result = ParseUtils.Parse("=1*1");
+
+            Assert.Equal(expected, result);
+        }
+
     }
 }

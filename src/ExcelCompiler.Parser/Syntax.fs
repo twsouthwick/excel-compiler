@@ -21,8 +21,11 @@ type Factor =
     | Int of int
     | Float of float
 
+type Term =
+    | Factors of SyntaxList<Factor>
+
 type Expression =
-    | Term of SyntaxList<Factor>
+    | Terms of SyntaxList<Term>
 
 type Formula =
     | Expression of Expression

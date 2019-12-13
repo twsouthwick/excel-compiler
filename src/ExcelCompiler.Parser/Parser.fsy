@@ -28,15 +28,22 @@ open ExcelCompiler.Syntax
 start: Formula EOF { $1 }
 
 Formula:
-	| EQUALS Expression { Expression($2) }
+	| EQUALS Expression			{ Expression($2) }
 
 Expression:
-	| FactorList { Term(SyntaxList<Factor>.Create($1)) }
+	| TermList					{ Terms(SyntaxList<Term>.Create($1)) }
 
 FactorList:
 	| Factor					{ [$1] }
-	| FactorList PLUS Factor	{ $3 :: $1 }
+	| FactorList MULT Factor	{ $3 :: $1 }
+
+TermList:
+	| Term						{ [$1] }
+	| TermList PLUS Term		{ $3 :: $1 }
+
+Term:
+	| FactorList				{ Factors(SyntaxList<Factor>.Create($1)) }
 
 Factor:
-	| INT				{ Int($1) }
-	| FLOAT				{ Float($1) }
+	| INT						{ Int($1) }
+	| FLOAT						{ Float($1) }
