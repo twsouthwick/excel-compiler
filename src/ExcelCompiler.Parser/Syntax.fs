@@ -31,15 +31,13 @@ type  SyntaxList<'T when 'T : equality>  =
 type Factor =
     | Int of int
     | Float of float
-
-type Term =
+    | Expression of Expression
+and Term =
     | Factors of SyntaxList<Factor>
-
-type Expression =
+and Expression =
     | Terms of SyntaxList<Term>
     | Function of string * SyntaxList<Expression>
-
-type Formula =
+and Formula =
     | Expression of Expression
     | EmptyExpression
 

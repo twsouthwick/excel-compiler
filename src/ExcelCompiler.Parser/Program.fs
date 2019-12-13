@@ -14,3 +14,5 @@ let public Tokenize text =
         while not lexbuf.IsPastEndOfStream do
             yield sprintf "%A" (Lexer.parsetokens lexbuf)
     }
+
+let public Flatten (input: Syntax.Formula) = sprintf "%A" input

@@ -120,6 +120,18 @@ namespace ExcelCompiler.Tests
             Assert.Equal(expected, result);
         }
 
+        [Fact]
+        public void NestedFunctions()
+        {
+            Parse("=1 + F2()");
+        }
+
+          [Fact]
+        public void NestedParenthesis()
+        {
+            Parse("=1 + (2+3)");
+        }
+
         private Formula Parse(string input)
         {
             foreach (var token in ParseUtils.Tokenize(input))
@@ -127,7 +139,11 @@ namespace ExcelCompiler.Tests
                 _output.WriteLine(token);
             }
 
-            return ParseUtils.Parse(input);
+            var result = ParseUtils.Parse(input);
+
+            _output.WriteLine(ParseUtils.Flatten(result));
+
+            return result;
         }
 
         private Expression CreateExpression(int v)
