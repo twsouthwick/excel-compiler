@@ -38,7 +38,14 @@ type ArgumentList = SyntaxList<Expression>
 and Literal =
     | Int of int
     | Float of float
+and CellReference =
+    | Relative of string
+    | Absolute of string
+    | AbsoluteColumn of string
+    | AbsoluteRow of string
 and Expression =
+    | CellReferenceExpression of CellReference
+    | AnchoredCellReferenceExpression of string * bool * bool
     | BinaryExpression of Expression * Operation * Expression
     | LiteralExpression of Literal
     | FunctionExpression of string * ArgumentList

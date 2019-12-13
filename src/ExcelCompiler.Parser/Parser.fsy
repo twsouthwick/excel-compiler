@@ -46,9 +46,13 @@ Op:
 
 Expression:
 	| Function							{ $1 }
+	| CellReference						{ CellReferenceExpression($1) }
 	| Literal							{ LiteralExpression($1) }
 	| Expression Op Expression			{ BinaryExpression($1, $2, $3) }
 	| LEFT_PAREN Expression RIGHT_PAREN { $2 }
+
+CellReference:
+	| ID								{ Relative($1) }
 
 Function:
 	| ID LEFT_PAREN ArgList RIGHT_PAREN { FunctionExpression($1, CreateList($3)) }

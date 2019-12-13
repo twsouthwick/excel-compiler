@@ -56,7 +56,6 @@ namespace ExcelCompiler.Tests
             Assert.Equal(expected, result);
         }
 
-
         [Fact]
         public void Plus()
         {
@@ -195,6 +194,63 @@ namespace ExcelCompiler.Tests
 
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public void SimpleCellReference()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewCellReferenceExpression(
+                    CellReference.NewRelative("A1")));
+            var result = Parse("=A1");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void CellReferenceInArgument()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewBinaryExpression(
+                    Expression.NewCellReferenceExpression(
+                        CellReference.NewRelative("A1")),
+                    Operation.Multiply,
+                    Expression.NewFunctionExpression("A2",
+                        SyntaxList<Expression>.NewSingle(
+                            Expression.NewCellReferenceExpression(
+                                CellReference.NewRelative("A3"))))));
+            var result = Parse("=A1*A2(A3)");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void CellReferenceWithAnchor()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewCellReferenceExpression(
+                    CellReference.NewRelative("A1")));
+            var result = Parse("=A1");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void CellReferenceInArgumentWithAnchor()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewBinaryExpression(
+                    Expression.NewCellReferenceExpression(
+                        CellReference.NewRelative("A1")),
+                    Operation.Multiply,
+                    Expression.NewFunctionExpression("A2",
+                        SyntaxList<Expression>.NewSingle(
+                            Expression.NewCellReferenceExpression(
+                                CellReference.NewRelative("A3"))))));
+            var result = Parse("=A1*A2(A3)");
+
+            Assert.Equal(expected, result);
+        }
+
 
         private Statement Parse(string input)
         {
