@@ -1,27 +1,34 @@
 %{
-
+open Syntax
 
 %}
 
-// The start token becomes a parser function in the compiled code:
-%start start
-
 // Regular tokens
-%token HELLO
+%token <int> INT
+%token <float> FLOAT
 
 // Misc tokens
+%token EQUALS
 %token EOF
 
 // This is the type of the data produced by a successful reduction of the 'start'
 // symbol:
-%type < int > start
 
-%%
 
 // These are the rules of the grammar along with the F# code of the
 // actions executed as rules are reduced.
-start: File EOF { $1 }
 
-File:
-	| HELLO						{ 1 }
-	| HELLO HELLO				    { 2 }
+// The start token becomes a parser function in the compiled code:
+%start start
+%type <Syntax.Formula> start
+
+%%
+
+start: Formula EOF { $1 }
+
+Formula:
+	| EQUALS Expression { Expression($2) }
+
+Expression:
+	| INT				{ Int($1) }
+	| FLOAT				{ Float($1) }

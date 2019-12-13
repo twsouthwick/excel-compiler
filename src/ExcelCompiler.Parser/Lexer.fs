@@ -7,7 +7,7 @@ open System
 // Opens methods related to fslex.exe
 open FSharp.Text.Lexing
 
-open Token
+open Expressions
 
 let inc_lnum bol pos =
   let lnum = pos.pos_lnum in

@@ -1,4 +1,4 @@
-﻿module Token
+﻿module Expressions
 
 type Tokens =
     | EQUALS
@@ -14,9 +14,3 @@ type Tokens =
     | SLASH             | CARET
     // Misc
     | LPAREN            | RPAREN        | EOF
-
-type Expression =
-    | Text of string
-
-type Formula =
-    | Expression of Expression
