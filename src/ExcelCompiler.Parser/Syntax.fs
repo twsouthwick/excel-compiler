@@ -1,4 +1,4 @@
-﻿module Syntax
+﻿module ExcelCompiler.Syntax
 
 type Expression =
     | Int of int
@@ -6,4 +6,5 @@ type Expression =
 
 type Formula =
     | Expression of Expression
+    | EmptyExpression
 

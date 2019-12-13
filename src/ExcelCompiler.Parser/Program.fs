@@ -1,4 +1,4 @@
-module ParseUtils
+module ExcelCompiler.ParseUtils
 
 open FSharp.Text.Lexing
 

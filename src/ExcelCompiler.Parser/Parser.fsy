@@ -1,6 +1,5 @@
 %{
-open Syntax
-
+open ExcelCompiler.Syntax
 %}
 
 // Regular tokens
@@ -20,7 +19,7 @@ open Syntax
 
 // The start token becomes a parser function in the compiled code:
 %start start
-%type <Syntax.Formula> start
+%type <ExcelCompiler.Syntax.Formula> start
 
 %%
 
