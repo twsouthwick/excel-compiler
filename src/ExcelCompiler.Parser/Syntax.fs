@@ -42,9 +42,10 @@ and Expression =
     | BinaryExpression of Expression * Operation * Expression
     | LiteralExpression of Literal
     | FunctionExpression of string * ArgumentList
-and Formula =
-    | Expression of Expression
-    | EmptyExpression
+and Statement =
+    | Formula of Expression
+    | Literal of Literal
+    | Text of string
 
 let internal CreateList<'T when 'T : equality> (t : 'T list) =
     if t.IsEmpty then Empty

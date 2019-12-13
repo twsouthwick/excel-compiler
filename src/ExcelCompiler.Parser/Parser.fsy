@@ -27,14 +27,16 @@ open ExcelCompiler.Syntax
 
 // The start token becomes a parser function in the compiled code:
 %start start
-%type <ExcelCompiler.Syntax.Formula> start
+%type <ExcelCompiler.Syntax.Statement> start
 
 %%
 
-start: Formula EOF { $1 }
+start: Statement EOF { $1 }
 
-Formula:
-	| EQUALS Expression					{ Expression($2) }
+Statement :
+	| EQUALS Expression					{ Formula($2) }
+	| Literal							{ Literal($1) }
+	| ID								{ Text($1) }
 
 Op:
 	| PLUS		{ Add }

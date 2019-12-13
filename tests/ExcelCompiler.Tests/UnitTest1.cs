@@ -17,7 +17,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void Float()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewLiteralExpression(
                     Literal.NewFloat(1.2)));
 
@@ -29,7 +29,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void Int()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewLiteralExpression(
                     Literal.NewInt(1)));
             var result = Parse("=1");
@@ -37,19 +37,29 @@ namespace ExcelCompiler.Tests
             Assert.Equal(expected, result);
         }
 
-        [Fact(Skip = "Failing")]
-        public void Empty()
+        [Fact]
+        public void LiteralStatement()
         {
-            var expected = Formula.NewExpression(null);
+            var expected = Statement.NewLiteral(Literal.NewInt(1));
             var result = Parse("1");
 
             Assert.Equal(expected, result);
         }
 
         [Fact]
+        public void TextStatement()
+        {
+            var expected = Statement.NewText("hello");
+            var result = Parse("hello");
+
+            Assert.Equal(expected, result);
+        }
+
+
+        [Fact]
         public void Plus()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
                     Expression.NewLiteralExpression(Literal.NewInt(1)),
                     Operation.Add,
@@ -63,7 +73,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void Minus()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
                     Expression.NewLiteralExpression(Literal.NewInt(1)),
                     Operation.Subtract,
@@ -77,7 +87,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void Mult()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
                     Expression.NewLiteralExpression(Literal.NewInt(1)),
                     Operation.Multiply,
@@ -90,7 +100,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void MultNegative()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
                     Expression.NewLiteralExpression(Literal.NewInt(-1)),
                     Operation.Multiply,
@@ -103,7 +113,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void SimpleFormulaNoArg()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewFunctionExpression("F", SyntaxList<Expression>.Empty));
             var result = Parse("=F()");
 
@@ -113,7 +123,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void SimpleFormula1Arg()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewFunctionExpression(
                     "F", SyntaxList<Expression>.NewSingle(
                         CreateExpression(1))));
@@ -125,7 +135,7 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void SimpleFormula2Args()
         {
-            var expected = Formula.NewExpression(
+            var expected = Statement.NewFormula(
                 Expression.NewFunctionExpression(
                     "F", SyntaxList<Expression>.NewList(new[]
                     {
@@ -155,7 +165,7 @@ namespace ExcelCompiler.Tests
             Parse("=1 - (2+3)");
         }
 
-        private Formula Parse(string input)
+        private Statement Parse(string input)
         {
             foreach (var token in ParseUtils.Tokenize(input))
             {

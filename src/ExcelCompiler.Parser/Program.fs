@@ -15,4 +15,4 @@ let public Tokenize text =
             yield sprintf "%A" (Lexer.parsetokens lexbuf)
     }
 
-let public Flatten (input: Syntax.Formula) = sprintf "%A" input
+let public Flatten (input: Syntax.Statement) = sprintf "%A" input
