@@ -30,6 +30,7 @@ let char = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let whitespace = [' ' '\t' ]
 let newline = ('\n' | '\r' '\n')
+let cell = (char+)(digit+)[^'(']
 let identifier  = char(char|digit|['-' '_' '.'])*
 
 rule parsetokens = parse
@@ -49,5 +50,6 @@ rule parsetokens = parse
 | "("             { LEFT_PAREN }
 | ")"             { RIGHT_PAREN }
 | ","             { COMMA }
+| "$"             { DOLLAR }
 // ----------------------------
 | eof             { EOF }

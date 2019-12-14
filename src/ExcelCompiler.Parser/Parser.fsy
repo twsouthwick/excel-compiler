@@ -8,6 +8,7 @@ open ExcelCompiler.Syntax
 %token <string> ID
 
 // Misc tokens
+%token DOLLAR
 %token COMMA
 %token LEFT_PAREN
 %token RIGHT_PAREN
@@ -52,11 +53,17 @@ Expression:
 	| LEFT_PAREN Expression RIGHT_PAREN { $2 }
 
 CellReference:
-	| ID								{ Relative($1) }
+	| Label						{ CreateCellReference $1 false }
+	| Label DOLLAR INT			{ AbsoluteRow($1, $3) }
+	| DOLLAR Label				{ CreateCellReference $2 true }
+	| DOLLAR Label DOLLAR INT	{ Absolute($2, $4) }
 
 Function:
-	| ID LEFT_PAREN ArgList RIGHT_PAREN { FunctionExpression($1, CreateList($3)) }
-	| ID LEFT_PAREN RIGHT_PAREN			{ FunctionExpression($1, Empty) }
+	| Label LEFT_PAREN ArgList RIGHT_PAREN { FunctionExpression($1, CreateList($3)) }
+	| Label LEFT_PAREN RIGHT_PAREN			{ FunctionExpression($1, Empty) }
+
+Label:
+	| ID							{ $1 }
 
 ArgList:
 	| Expression					{ [$1] }

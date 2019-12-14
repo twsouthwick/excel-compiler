@@ -114,8 +114,18 @@ namespace ExcelCompiler.Tests
         public void SimpleFormulaNoArg()
         {
             var expected = Statement.NewFormula(
-                Expression.NewFunctionExpression("F", SyntaxList<Expression>.Empty));
-            var result = Parse("=F()");
+                Expression.NewFunctionExpression("F1", SyntaxList<Expression>.Empty));
+            var result = Parse("=F1()");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void SimpleFormulaMixedNameNoArg()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewFunctionExpression("F1F1F1F1F1", SyntaxList<Expression>.Empty));
+            var result = Parse("=F1F1F1F1F1()");
 
             Assert.Equal(expected, result);
         }
@@ -200,7 +210,7 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
-                    CellReference.NewRelative("A1")));
+                    CellReference.NewRelative("A", 1)));
             var result = Parse("=A1");
 
             Assert.Equal(expected, result);
@@ -212,23 +222,56 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
                     Expression.NewCellReferenceExpression(
-                        CellReference.NewRelative("A1")),
+                        CellReference.NewRelative("A", 1)),
                     Operation.Multiply,
                     Expression.NewFunctionExpression("A2",
                         SyntaxList<Expression>.NewSingle(
                             Expression.NewCellReferenceExpression(
-                                CellReference.NewRelative("A3"))))));
+                                CellReference.NewRelative("A", 3))))));
             var result = Parse("=A1*A2(A3)");
 
             Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void CellReferenceWithAnchor()
+        public void AbsoluteColumnCellReference()
         {
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
-                    CellReference.NewRelative("A1")));
+                    CellReference.NewAbsoluteColumn("A", 1)));
+            var result = Parse("=$A1");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void AbsoluteRowCellReference()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewCellReferenceExpression(
+                    CellReference.NewAbsoluteRow("A", 1)));
+            var result = Parse("=A$1");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void AbsoluteCellReference()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewCellReferenceExpression(
+                    CellReference.NewAbsolute("A", 1)));
+            var result = Parse("=$A$1");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void RelativeCellReference()
+        {
+            var expected = Statement.NewFormula(
+                Expression.NewCellReferenceExpression(
+                    CellReference.NewRelative("A", 1)));
             var result = Parse("=A1");
 
             Assert.Equal(expected, result);
@@ -240,12 +283,12 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
                     Expression.NewCellReferenceExpression(
-                        CellReference.NewRelative("A1")),
+                        CellReference.NewRelative("A", 1)),
                     Operation.Multiply,
                     Expression.NewFunctionExpression("A2",
                         SyntaxList<Expression>.NewSingle(
                             Expression.NewCellReferenceExpression(
-                                CellReference.NewRelative("A3"))))));
+                                CellReference.NewRelative("A", 3))))));
             var result = Parse("=A1*A2(A3)");
 
             Assert.Equal(expected, result);
