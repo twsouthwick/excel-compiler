@@ -42,6 +42,7 @@ rule parsetokens = parse
 | digit+('.'digit+)?(['e''E']digit+)?   { FLOAT (Double.Parse(lexeme lexbuf)) }
 | identifier  { ID(lexeme lexbuf) }
 // ----------------------------
+| '"'             { read_string "" false lexbuf }
 | "="             { EQUALS }
 | "+"             { PLUS }
 | "-"             { MINUS }
@@ -53,3 +54,9 @@ rule parsetokens = parse
 | "$"             { DOLLAR }
 // ----------------------------
 | eof             { EOF }
+and read_string str ignorequote =
+  parse
+  | '"'           { if ignorequote  then (read_string (str+"\\\"") false lexbuf) else STRING (str) }
+  | '\\'          { read_string str true lexbuf }
+  | [^ '"' '\\']+ { read_string (str+(lexeme lexbuf)) false lexbuf }
+  | eof           { raise (Exception ("String is not terminated")) }

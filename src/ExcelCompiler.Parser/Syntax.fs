@@ -39,6 +39,7 @@ type ArgumentList = SyntaxList<Expression>
 and Literal =
     | Int of int
     | Float of float
+    | String of string
 and CellReference =
     | Relative of string * int
     | Absolute of string * int
