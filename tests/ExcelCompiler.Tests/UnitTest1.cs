@@ -62,6 +62,15 @@ namespace ExcelCompiler.Tests
             Assert.Equal(expected, result);
         }
 
+        [Fact]
+        public void SingleTextStatement()
+        {
+            var expected = Statement.NewText("hello");
+            var result = Parse("hello");
+
+            Assert.Equal(expected, result);
+        }
+
         [Fact(Skip = "failing")]
         public void TextStatement()
         {

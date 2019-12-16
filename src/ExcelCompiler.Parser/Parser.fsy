@@ -38,6 +38,7 @@ start: Statement EOF { $1 }
 Statement :
 	| EQUALS Expression					{ Formula($2) }
 	| Literal							{ Literal($1) }
+	| ID								{ Text($1) }
 
 Op:
 	| PLUS		{ Add }
