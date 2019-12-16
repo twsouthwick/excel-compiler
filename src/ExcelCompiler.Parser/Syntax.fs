@@ -35,10 +35,12 @@ type Operation =
     | Multiply
     | Divide
 
-type ArgumentList = SyntaxList<Expression>
-and Literal =
+type Number =
     | Int of int
     | Float of float
+and ArgumentList = SyntaxList<Expression>
+and Literal =
+    | Number of Number
     | String of string
 and CellReference =
     | Relative of string * int

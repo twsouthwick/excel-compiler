@@ -20,7 +20,8 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewLiteralExpression(
-                    Literal.NewFloat(1.2)));
+                    Literal.NewNumber(
+                        Number.NewFloat(1.2))));
 
             var result = Parse("=1.2");
 
@@ -32,7 +33,8 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewLiteralExpression(
-                    Literal.NewInt(1)));
+                    Literal.NewNumber(
+                        Number.NewInt(1))));
             var result = Parse("=1");
 
             Assert.Equal(expected, result);
@@ -52,7 +54,9 @@ namespace ExcelCompiler.Tests
         [Fact]
         public void LiteralStatement()
         {
-            var expected = Statement.NewLiteral(Literal.NewInt(1));
+            var expected = Statement.NewLiteral(
+                Literal.NewNumber(
+                    Number.NewInt(1)));
             var result = Parse("1");
 
             Assert.Equal(expected, result);
@@ -72,9 +76,9 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Add,
-                    Expression.NewLiteralExpression(Literal.NewInt(2))));
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2)))));
 
             var result = Parse("=1+2");
 
@@ -86,9 +90,9 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Subtract,
-                    Expression.NewLiteralExpression(Literal.NewInt(2))));
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2)))));
 
             var result = Parse("=1-2");
 
@@ -100,9 +104,9 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Multiply,
-                    Expression.NewLiteralExpression(Literal.NewInt(2))));
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2)))));
             var result = Parse("=1*2");
 
             Assert.Equal(expected, result);
@@ -113,9 +117,9 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(-1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(-1))),
                     Operation.Multiply,
-                    Expression.NewLiteralExpression(Literal.NewInt(-2))));
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(-2)))));
             var result = Parse("=-1*-2");
 
             Assert.Equal(expected, result);
@@ -173,7 +177,7 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Add,
                     Expression.NewFunctionExpression("F2", SyntaxList<Expression>.Empty)));
 
@@ -187,12 +191,12 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Add,
                     Expression.NewBinaryExpression(
-                        Expression.NewLiteralExpression(Literal.NewInt(2)),
+                        Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2))),
                         Operation.Add,
-                        Expression.NewLiteralExpression(Literal.NewInt(3)))));
+                        Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(3))))));
 
             var result = Parse("=1 + (2+3)");
 
@@ -204,12 +208,12 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewBinaryExpression(
-                    Expression.NewLiteralExpression(Literal.NewInt(1)),
+                    Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Subtract,
                     Expression.NewBinaryExpression(
-                        Expression.NewLiteralExpression(Literal.NewInt(2)),
+                        Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2))),
                         Operation.Add,
-                        Expression.NewLiteralExpression(Literal.NewInt(3)))));
+                        Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(3))))));
 
             var result = Parse("=1 - (2+3)");
 
@@ -321,6 +325,6 @@ namespace ExcelCompiler.Tests
         }
 
         private Expression CreateExpression(int v)
-            => Expression.NewLiteralExpression(Literal.NewInt(v));
+            => Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(v)));
     }
 }
