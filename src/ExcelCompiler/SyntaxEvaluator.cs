@@ -14,11 +14,11 @@ namespace ExcelCompiler
 
         public T GetCell<T>(CellReference cell)
         {
-            var result = ParseUtils.EvaluateSyntax<CellReference>(_func, cell);
+            var result = Evaluation.EvaluateSyntax<CellReference>(_func, cell);
 
             if (typeof(T) == typeof(int))
             {
-                return (T)(object)ParseUtils.GetIntValue(result);
+                return (T)(object)Evaluation.GetIntValue(result);
             }
 
             throw new InvalidOperationException();
