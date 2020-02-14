@@ -7,11 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C7F2EEA3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB99FC56-3B6E-46DF-9C59-6C1979996206}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelCompiler", "src\ExcelCompiler\ExcelCompiler.csproj", "{2CCC17A2-9CCB-43C3-A28E-32D5EC09E179}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelCompiler", "src\ExcelCompiler\ExcelCompiler.csproj", "{2CCC17A2-9CCB-43C3-A28E-32D5EC09E179}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelCompiler.Tests", "tests\ExcelCompiler.Tests\ExcelCompiler.Tests.csproj", "{9028EA8B-FC81-4072-A211-F44BC91F44C3}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ExcelCompiler.Parser", "src\ExcelCompiler.Parser\ExcelCompiler.Parser.fsproj", "{21528B79-42B0-4A63-A00D-E05335B6AC2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelCompiler.Parser.Tests", "tests\ExcelCompiler.Parser.Tests\ExcelCompiler.Parser.Tests.csproj", "{B3733E1F-B9A5-4964-B3BF-F94E1325F7C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{21528B79-42B0-4A63-A00D-E05335B6AC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21528B79-42B0-4A63-A00D-E05335B6AC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21528B79-42B0-4A63-A00D-E05335B6AC2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3733E1F-B9A5-4964-B3BF-F94E1325F7C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3733E1F-B9A5-4964-B3BF-F94E1325F7C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3733E1F-B9A5-4964-B3BF-F94E1325F7C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3733E1F-B9A5-4964-B3BF-F94E1325F7C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{2CCC17A2-9CCB-43C3-A28E-32D5EC09E179} = {FB99FC56-3B6E-46DF-9C59-6C1979996206}
 		{9028EA8B-FC81-4072-A211-F44BC91F44C3} = {C7F2EEA3-3840-4F7E-81B9-7FBDC9F7914A}
 		{21528B79-42B0-4A63-A00D-E05335B6AC2C} = {FB99FC56-3B6E-46DF-9C59-6C1979996206}
+		{B3733E1F-B9A5-4964-B3BF-F94E1325F7C1} = {C7F2EEA3-3840-4F7E-81B9-7FBDC9F7914A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73B0824E-0ACB-43D7-9848-EB435B96D8B9}

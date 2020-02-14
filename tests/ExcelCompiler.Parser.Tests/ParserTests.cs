@@ -1,4 +1,3 @@
-using Microsoft.FSharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -6,11 +5,11 @@ using static ExcelCompiler.Syntax;
 
 namespace ExcelCompiler.Tests
 {
-    public class UnitTest1
+    public class ParserTests
     {
         private readonly ITestOutputHelper _output;
 
-        public UnitTest1(ITestOutputHelper output)
+        public ParserTests(ITestOutputHelper output)
         {
             _output = output;
         }

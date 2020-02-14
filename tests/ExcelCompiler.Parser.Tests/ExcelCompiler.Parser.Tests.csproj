@@ -14,13 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ExcelCompiler\ExcelCompiler.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="SimpleFormulas.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\src\ExcelCompiler.Parser\ExcelCompiler.Parser.fsproj" />
   </ItemGroup>
 
 </Project>
