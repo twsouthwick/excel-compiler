@@ -48,6 +48,7 @@ and CellReference =
     | AbsoluteColumn of string * int
     | AbsoluteRow of string * int
 and Expression =
+    | CellReferenceRangeExpression of CellReference * CellReference
     | CellReferenceExpression of CellReference
     | AnchoredCellReferenceExpression of string * bool * bool
     | BinaryExpression of Expression * Operation * Expression

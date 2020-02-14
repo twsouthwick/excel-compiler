@@ -318,6 +318,20 @@ namespace ExcelCompiler.Tests
             Assert.Equal(expected, result);
         }
 
+        [Fact]
+        public void CellReferenceRange()
+        {
+            var expected = Statement.NewFormula(
+                    Expression.NewFunctionExpression("SUM",
+                        SyntaxList<Expression>.NewSingle(
+                            Expression.NewCellReferenceRangeExpression(
+                                CellReference.NewRelative("C", 3),
+                                CellReference.NewRelative("C", 5)))));
+
+            var result = Parse("=SUM(C3:C5)");
+
+            Assert.Equal(expected, result);
+        }
 
         private Statement Parse(string input)
         {

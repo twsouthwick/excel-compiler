@@ -52,6 +52,7 @@ rule parsetokens = parse
 | ")"             { RIGHT_PAREN }
 | ","             { COMMA }
 | "$"             { DOLLAR }
+| ":"             { COLON }
 // ----------------------------
 | eof             { EOF }
 and read_string str ignorequote =
