@@ -22,7 +22,7 @@ namespace ExcelCompiler.Tests
                     Literal.NewNumber(
                         Number.NewFloat(1.2))));
 
-            var result = Parse("=1.2");
+            var result = Parse("1.2");
 
             Assert.Equal(expected, result);
         }
@@ -34,7 +34,7 @@ namespace ExcelCompiler.Tests
                 Expression.NewLiteralExpression(
                     Literal.NewNumber(
                         Number.NewInt(1))));
-            var result = Parse("=1");
+            var result = Parse("1");
 
             Assert.Equal(expected, result);
         }
@@ -45,27 +45,7 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewLiteralExpression(
                     Literal.NewString("hello")));
-            var result = Parse("=\"hello\"");
-
-            Assert.Equal(expected, result);
-        }
-
-        [Fact]
-        public void LiteralStatement()
-        {
-            var expected = Statement.NewLiteral(
-                Literal.NewNumber(
-                    Number.NewInt(1)));
-            var result = Parse("1");
-
-            Assert.Equal(expected, result);
-        }
-
-        [Fact]
-        public void SingleTextStatement()
-        {
-            var expected = Statement.NewText("hello");
-            var result = Parse("hello");
+            var result = Parse("\"hello\"");
 
             Assert.Equal(expected, result);
         }
@@ -88,7 +68,7 @@ namespace ExcelCompiler.Tests
                     Operation.Add,
                     Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2)))));
 
-            var result = Parse("=1+2");
+            var result = Parse("1+2");
 
             Assert.Equal(expected, result);
         }
@@ -102,7 +82,7 @@ namespace ExcelCompiler.Tests
                     Operation.Subtract,
                     Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2)))));
 
-            var result = Parse("=1-2");
+            var result = Parse("1-2");
 
             Assert.Equal(expected, result);
         }
@@ -115,7 +95,7 @@ namespace ExcelCompiler.Tests
                     Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(1))),
                     Operation.Multiply,
                     Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(2)))));
-            var result = Parse("=1*2");
+            var result = Parse("1*2");
 
             Assert.Equal(expected, result);
         }
@@ -128,7 +108,7 @@ namespace ExcelCompiler.Tests
                     Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(-1))),
                     Operation.Multiply,
                     Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(-2)))));
-            var result = Parse("=-1*-2");
+            var result = Parse("-1*-2");
 
             Assert.Equal(expected, result);
         }
@@ -138,7 +118,7 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewFunctionExpression("F1", SyntaxList<Expression>.Empty));
-            var result = Parse("=F1()");
+            var result = Parse("F1()");
 
             Assert.Equal(expected, result);
         }
@@ -148,7 +128,7 @@ namespace ExcelCompiler.Tests
         {
             var expected = Statement.NewFormula(
                 Expression.NewFunctionExpression("F1F1F1F1F1", SyntaxList<Expression>.Empty));
-            var result = Parse("=F1F1F1F1F1()");
+            var result = Parse("F1F1F1F1F1()");
 
             Assert.Equal(expected, result);
         }
@@ -160,7 +140,7 @@ namespace ExcelCompiler.Tests
                 Expression.NewFunctionExpression(
                     "F", SyntaxList<Expression>.NewSingle(
                         CreateExpression(1))));
-            var result = Parse("=F(1)");
+            var result = Parse("F(1)");
 
             Assert.Equal(expected, result);
         }
@@ -175,7 +155,7 @@ namespace ExcelCompiler.Tests
                         CreateExpression(1),
                         CreateExpression(2),
                     })));
-            var result = Parse("=F(1, 2)");
+            var result = Parse("F(1, 2)");
 
             Assert.Equal(expected, result);
         }
@@ -189,7 +169,7 @@ namespace ExcelCompiler.Tests
                     Operation.Add,
                     Expression.NewFunctionExpression("F2", SyntaxList<Expression>.Empty)));
 
-            var result = Parse("=1 + F2()");
+            var result = Parse("1 + F2()");
 
             Assert.Equal(expected, result);
         }
@@ -206,7 +186,7 @@ namespace ExcelCompiler.Tests
                         Operation.Add,
                         Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(3))))));
 
-            var result = Parse("=1 + (2+3)");
+            var result = Parse("1 + (2+3)");
 
             Assert.Equal(expected, result);
         }
@@ -223,7 +203,7 @@ namespace ExcelCompiler.Tests
                         Operation.Add,
                         Expression.NewLiteralExpression(Literal.NewNumber(Number.NewInt(3))))));
 
-            var result = Parse("=1 - (2+3)");
+            var result = Parse("1 - (2+3)");
 
             Assert.Equal(expected, result);
         }
@@ -234,7 +214,7 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
                     CellReference.NewRelative("A", 1)));
-            var result = Parse("=A1");
+            var result = Parse("A1");
 
             Assert.Equal(expected, result);
         }
@@ -251,7 +231,7 @@ namespace ExcelCompiler.Tests
                         SyntaxList<Expression>.NewSingle(
                             Expression.NewCellReferenceExpression(
                                 CellReference.NewRelative("A", 3))))));
-            var result = Parse("=A1*A2(A3)");
+            var result = Parse("A1*A2(A3)");
 
             Assert.Equal(expected, result);
         }
@@ -262,7 +242,7 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
                     CellReference.NewAbsoluteColumn("A", 1)));
-            var result = Parse("=$A1");
+            var result = Parse("$A1");
 
             Assert.Equal(expected, result);
         }
@@ -273,7 +253,7 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
                     CellReference.NewAbsoluteRow("A", 1)));
-            var result = Parse("=A$1");
+            var result = Parse("A$1");
 
             Assert.Equal(expected, result);
         }
@@ -284,7 +264,7 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
                     CellReference.NewAbsolute("A", 1)));
-            var result = Parse("=$A$1");
+            var result = Parse("$A$1");
 
             Assert.Equal(expected, result);
         }
@@ -295,7 +275,7 @@ namespace ExcelCompiler.Tests
             var expected = Statement.NewFormula(
                 Expression.NewCellReferenceExpression(
                     CellReference.NewRelative("A", 1)));
-            var result = Parse("=A1");
+            var result = Parse("A1");
 
             Assert.Equal(expected, result);
         }
@@ -312,7 +292,7 @@ namespace ExcelCompiler.Tests
                         SyntaxList<Expression>.NewSingle(
                             Expression.NewCellReferenceExpression(
                                 CellReference.NewRelative("A", 3))))));
-            var result = Parse("=A1*A2(A3)");
+            var result = Parse("A1*A2(A3)");
 
             Assert.Equal(expected, result);
         }
@@ -327,7 +307,7 @@ namespace ExcelCompiler.Tests
                                 CellReference.NewRelative("C", 3),
                                 CellReference.NewRelative("C", 5)))));
 
-            var result = Parse("=SUM(C3:C5)");
+            var result = Parse("SUM(C3:C5)");
 
             Assert.Equal(expected, result);
         }
