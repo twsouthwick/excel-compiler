@@ -58,6 +58,7 @@ and Statement =
     | Formula of Expression
     | Literal of Literal
     | Text of string
+    | Nothing
 
 let internal CreateList<'T when 'T : equality> (t : 'T list) =
     if t.IsEmpty then Empty

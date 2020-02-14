@@ -24,7 +24,7 @@ namespace ExcelCompiler
                 }
             }
 
-            return new CompiledDocument(dictionary);
+            return new InMemoryCompiledDocument(dictionary);
         }
 
         private string GetSharedString(Cell cell, WorkbookPart wbPart)
@@ -75,10 +75,23 @@ namespace ExcelCompiler
             }
         }
 
-        private class CompiledDocument : ICompiledDocument
+        private class InMemoryCompiledDocument : ICompiledDocument
         {
-            internal CompiledDocument(Dictionary<CellReference, Syntax.Statement> lookup)
+            private readonly Dictionary<CellReference, Syntax.Statement> _lookup;
+
+            internal InMemoryCompiledDocument(Dictionary<CellReference, Syntax.Statement> lookup)
             {
+                _lookup = lookup;
+            }
+
+            public Syntax.Statement GetCell(CellReference cell)
+            {
+                if (_lookup.TryGetValue(cell, out var result))
+                {
+                    return result;
+                }
+
+                return Syntax.Statement.Nothing;
             }
         }
     }

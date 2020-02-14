@@ -16,5 +16,7 @@ namespace ExcelCompiler
         public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode(Reference);
 
         public override bool Equals(object obj) => obj is CellReference other ? Equals(other) : false;
+
+        public static implicit operator CellReference(string cell) => new CellReference(cell);
     }
 }
