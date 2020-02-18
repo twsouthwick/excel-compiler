@@ -3,13 +3,15 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Collections.Generic;
 using System.Linq;
 
+using eCell = DocumentFormat.OpenXml.Spreadsheet.Cell;
+
 namespace ExcelCompiler
 {
     public class DocumentCompiler
     {
         public ICompiledDocument Compile(string path)
         {
-            var dictionary = new Dictionary<CellReference, Syntax.Statement>();
+            var dictionary = new Dictionary<Cell, Syntax.Statement>();
 
             using (var doc = SpreadsheetDocument.Open(path, isEditable: false))
             {
@@ -17,9 +19,9 @@ namespace ExcelCompiler
                 {
                     var wsPart = (WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id);
 
-                    foreach (var cell in wsPart.Worksheet.Descendants<Cell>())
+                    foreach (var cell in wsPart.Worksheet.Descendants<eCell>())
                     {
-                        dictionary.Add(new CellReference(cell.CellReference.InnerText), GetStatement(cell, doc.WorkbookPart));
+                        dictionary.Add(new Cell(cell.CellReference.InnerText), GetStatement(cell, doc.WorkbookPart));
                     }
                 }
             }
@@ -27,7 +29,7 @@ namespace ExcelCompiler
             return new InMemoryCompiledDocument(dictionary);
         }
 
-        private string GetSharedString(Cell cell, WorkbookPart wbPart)
+        private string GetSharedString(eCell cell, WorkbookPart wbPart)
         {
             var stringTable = wbPart.GetPartsOfType<SharedStringTablePart>()
                 .First();
@@ -36,7 +38,7 @@ namespace ExcelCompiler
             return stringTable.SharedStringTable.ElementAt(value).InnerText;
         }
 
-        private Syntax.Statement GetStatement(Cell cell, WorkbookPart wbPart)
+        private Syntax.Statement GetStatement(eCell cell, WorkbookPart wbPart)
         {
             if (cell.CellFormula != null)
             {
@@ -77,14 +79,14 @@ namespace ExcelCompiler
 
         private class InMemoryCompiledDocument : ICompiledDocument
         {
-            private readonly Dictionary<CellReference, Syntax.Statement> _lookup;
+            private readonly Dictionary<Cell, Syntax.Statement> _lookup;
 
-            internal InMemoryCompiledDocument(Dictionary<CellReference, Syntax.Statement> lookup)
+            internal InMemoryCompiledDocument(Dictionary<Cell, Syntax.Statement> lookup)
             {
                 _lookup = lookup;
             }
 
-            public Syntax.Statement GetCell(CellReference cell)
+            public Syntax.Statement GetCell(Cell cell)
             {
                 if (_lookup.TryGetValue(cell, out var result))
                 {

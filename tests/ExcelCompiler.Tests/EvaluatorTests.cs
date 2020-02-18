@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Xunit;
 
 using static ExcelCompiler.Syntax;
@@ -16,7 +15,7 @@ namespace ExcelCompiler.Tests
             var doc = new TestCompiledDocument();
             var evaluator = new SyntaxEvaluator(doc, Substitute.For<IFunctionProvider>());
 
-            Assert.Equal(0, evaluator.GetCell<int>("A1"));
+            Assert.Equal(0, evaluator.GetCell<int>(new Cell("A1")));
         }
 
         [Fact]
@@ -24,12 +23,12 @@ namespace ExcelCompiler.Tests
         {
             var doc = new TestCompiledDocument
             {
-                { "A1", Statement.NewLiteral(Literal.NewNumber(Number.NewInt(2))) }
+                { new Cell("A1"), Statement.NewLiteral(Literal.NewNumber(Number.NewInt(2))) }
             };
 
             var evaluator = new SyntaxEvaluator(doc, Substitute.For<IFunctionProvider>());
 
-            Assert.Equal(2, evaluator.GetCell<int>("A1"));
+            Assert.Equal(2, evaluator.GetCell<int>(new Cell("A1")));
         }
 
         [Fact]
@@ -37,7 +36,7 @@ namespace ExcelCompiler.Tests
         {
             var doc = new TestCompiledDocument
             {
-                { "A1", Statement.NewFormula(
+                { new Cell("A1"), Statement.NewFormula(
                     Expression.NewBinaryExpression(
                         Expression.NewLiteralExpression(
                             Literal.NewNumber(Number.NewInt(2))),
@@ -48,19 +47,19 @@ namespace ExcelCompiler.Tests
 
             var evaluator = new SyntaxEvaluator(doc, Substitute.For<IFunctionProvider>());
 
-            Assert.Equal(5, evaluator.GetCell<int>("A1"));
+            Assert.Equal(5, evaluator.GetCell<int>(new Cell("A1")));
         }
 
-        private class TestCompiledDocument : ICompiledDocument, IEnumerable<(CellReference, Syntax.Statement)>
+        private class TestCompiledDocument : ICompiledDocument, IEnumerable<(Cell, Syntax.Statement)>
         {
-            private readonly Dictionary<CellReference, Syntax.Statement> _lookup = new Dictionary<CellReference, Statement>();
+            private readonly Dictionary<Cell, Syntax.Statement> _lookup = new Dictionary<Cell, Statement>();
 
-            public void Add(CellReference reference, Syntax.Statement statement)
+            public void Add(Cell reference, Syntax.Statement statement)
             {
                 _lookup.Add(reference, statement);
             }
 
-            public Syntax.Statement GetCell(CellReference cell)
+            public Syntax.Statement GetCell(Cell cell)
             {
                 if (_lookup.TryGetValue(cell, out var result))
                 {
@@ -70,7 +69,7 @@ namespace ExcelCompiler.Tests
                 return Syntax.Statement.Nothing;
             }
 
-            IEnumerator<(CellReference, Syntax.Statement)> IEnumerable<(CellReference, Syntax.Statement)>.GetEnumerator()
+            IEnumerator<(Cell, Syntax.Statement)> IEnumerable<(Cell, Syntax.Statement)>.GetEnumerator()
             {
                 foreach (var item in _lookup)
                 {

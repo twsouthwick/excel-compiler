@@ -1,5 +1,4 @@
-﻿using NSubstitute;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 
 namespace ExcelCompiler.Tests
@@ -13,7 +12,7 @@ namespace ExcelCompiler.Tests
             var compiled = compiler.Compile("SimpleFormulas.xlsx");
             var evaluator = new SyntaxEvaluator(compiled, new CustomFunctionProvider());
 
-            var b2 = evaluator.GetCell<int>("a2");
+            var b2 = evaluator.GetCell<int>(new Cell("a2"));
         }
 
         private class CustomFunctionProvider : IFunctionProvider
