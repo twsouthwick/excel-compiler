@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NSubstitute;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Xunit;
@@ -13,7 +14,7 @@ namespace ExcelCompiler.Tests
         public void EmptyLiteral()
         {
             var doc = new TestCompiledDocument();
-            var evaluator = new SyntaxEvaluator(doc);
+            var evaluator = new SyntaxEvaluator(doc, Substitute.For<IFunctionProvider>());
 
             Assert.Equal(0, evaluator.GetCell<int>("A1"));
         }
@@ -26,7 +27,7 @@ namespace ExcelCompiler.Tests
                 { "A1", Statement.NewLiteral(Literal.NewNumber(Number.NewInt(2))) }
             };
 
-            var evaluator = new SyntaxEvaluator(doc);
+            var evaluator = new SyntaxEvaluator(doc, Substitute.For<IFunctionProvider>());
 
             Assert.Equal(2, evaluator.GetCell<int>("A1"));
         }
@@ -45,7 +46,7 @@ namespace ExcelCompiler.Tests
                             Literal.NewNumber(Number.NewInt(3)))))}
             };
 
-            var evaluator = new SyntaxEvaluator(doc);
+            var evaluator = new SyntaxEvaluator(doc, Substitute.For<IFunctionProvider>());
 
             Assert.Equal(5, evaluator.GetCell<int>("A1"));
         }

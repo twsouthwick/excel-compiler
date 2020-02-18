@@ -43,18 +43,27 @@ let private Binary left op right =
     | (LiteralExpression l, LiteralExpression r) -> Literal(BinaryLiteral l op r)
     | (_, _) -> failwith "Unknown"
 
-let private Unwrap exp =
+
+let rec private Unwrap exp functionLookup =
+    let expand exp =
+        Unwrap exp functionLookup
+    let expand_args args =
+        match args with
+        | Empty -> Seq.empty
+        | Single s -> Seq.singleton (expand s)
+        | List l -> Seq.map expand l
+
     match exp with
     | LiteralExpression l -> Literal(l)
     | BinaryExpression (left, op, right) -> Binary left op right
-    //| FunctionExpression (f, exp) -> Function f exp
+    | FunctionExpression (name, expression) -> functionLookup(name, expand_args expression)
     | _ -> Literal(Number(Int(0)))
 
-let public EvaluateSyntax compiledDocument cell : Statement =
+let public EvaluateSyntax cell compiledDocument functionLookup : Statement =
     let syntax : Statement = compiledDocument(cell)
 
     match syntax with
-        | Formula f -> Unwrap f
+        | Formula f -> Unwrap f functionLookup
         | Literal l -> Literal l
         | Text t -> Text t
         | Nothing -> Nothing
